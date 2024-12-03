@@ -12,10 +12,6 @@ pub fn main() {
 }
 
 
-fn follow_rule(ints: List(Int), s: fn(#(Int, Int)) -> Bool) -> Bool {
-  ints |> list.window_by_2 |> list.all(s)
-}
-
 fn safe(row: List(Int)) ->  Bool {
   let all_increase = fn(a: #(Int, Int)) {a.1 - a.0 > 0}
   let all_decrease = fn(a: #(Int, Int)) {a.1 - a.0 < 0}
@@ -24,8 +20,10 @@ fn safe(row: List(Int)) ->  Bool {
     diff > 0 && diff <= 3
   }
 
-  let stair = follow_rule(row, all_increase) || follow_rule(row, all_decrease)
-  stair && follow_rule(row, not_too_big_or_too_small)
+  row |> list.window_by_2 |> list.all(fn(a) {
+    let stair = all_increase(a) || all_decrease(a)
+    stair && not_too_big_or_too_small(a)
+  })
 }
 
 pub fn day2a(path) -> Int {
@@ -36,16 +34,14 @@ pub fn day2a(path) -> Int {
 
 
 pub fn day2b(path) -> Int {
-  let reports: Int =  aoc_gleam.to_int(aoc_gleam.read_string(path))
+  aoc_gleam.to_int(aoc_gleam.read_string(path))
   |> list.map(fn(a) {
-    let number_of_levels = list.count(a, fn(_a) {True})
+    let number_of_levels = list.length(a)
     list.combinations(a, number_of_levels - 1) })
   |> list.count(fn(li) {
-    list.any(li, fn(ss) {
-      safe(ss)
+    list.any(li, fn(combination) {
+      safe(combination)
     })})
-
-  reports
 }
 
 
