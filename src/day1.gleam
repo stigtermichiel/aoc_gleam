@@ -7,14 +7,28 @@ import gleam/list
 pub fn main() {
    let path = "day1"
 
-   let b: List(#(String, String)) = aoc_gleam.read_string_to_tuple(path)
-   let s = aoc_gleam.string_tuple_to_int(b)
-   let a = sort_tuple(s)
+  let parsed_list: List(#(String, String)) = aoc_gleam.read_string_to_tuple(path)
+  let int_tuples = aoc_gleam.string_tuple_to_int(parsed_list)
+  let sorted_tuples = sort_tuple(int_tuples)
 
-   let total_distance = list.map(a, fn(tup) {distance(tup)}) |> list.fold(0, fn(acc, distance) { acc + distance })
+  let total_distance = list.map(sorted_tuples, fn(tup) {distance(tup)}) |> list.fold(0, fn(acc, distance) { acc + distance })
+
+  io.println("day 1a")
+  io.println(int.to_string(total_distance))
 
 
-   io.debug(total_distance)
+  let left_list = list.map(int_tuples, fn(tup) {tup.0})
+  let right_list = list.map(int_tuples, fn(tup) {tup.1})
+
+  let b = list.map(left_list, fn(num) {
+    let number_of_same_distances  = list.count(right_list, fn(right_num) { right_num == num })
+    num * number_of_same_distances
+  }) |> list.fold(0, fn(acc, distance) { acc + distance })
+
+  io.println("day 1b")
+  io.println(int.to_string(b))
+
+
 }
 
 pub fn sort_tuple(a: List(#(Int, Int))) -> List(#(Int, Int)) {
