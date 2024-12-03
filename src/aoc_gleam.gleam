@@ -4,26 +4,17 @@ import simplifile
 import gleam/list
 
 
-pub fn read_string_to_tuple(file) {
+pub type StringRows = List(List(String))
+pub type IntRows = List(List(Int))
+
+pub fn read_string(file) -> StringRows{
   let path = "./input_files/" <> file
   let assert Ok(content) = simplifile.read(path)
   string.split(content, "\n")
-  |> list.filter_map(fn(a) { string.split_once(a, "   ") })
+  |> list.map(fn(a) { string.split(a, " ") |> list.filter(fn(s) { !string.is_empty(s) }) })
+  |> list.filter(fn(a) { !list.is_empty(a) })
 }
 
-pub fn string_tuple_to_int(str_tup: List(#(String, String))) -> List(#(Int, Int)) {
-  list.filter_map(str_tup, fn(st_tup) {
-    let left_parse_result =  int.parse(st_tup.0)
-    let right_parse_result =  int.parse(st_tup.1)
-
-    case left_parse_result {
-      Ok(i) -> {
-        case right_parse_result {
-          Ok(a) -> Ok(#(i, a))
-          Error(x) -> Error(x)
-        }
-      }
-      Error(x) -> Error(x)
-    }
-  })
+pub fn to_int(l: List(List(String))) -> IntRows {
+  list.map(l, fn(a) { list.filter_map(a, fn(b) { int.parse(b)})})
 }
