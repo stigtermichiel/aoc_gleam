@@ -37,10 +37,10 @@ pub fn day3b(path) -> Int {
 
   let assert Ok(re) =
     regexp.from_string("mul\\((\\d+),(\\d+)\\)|do\\(\\)|don't\\(\\)")
-  let a: List(regexp.Match) = regexp.scan(with: re, content: input)
+  let matches: List(regexp.Match) = regexp.scan(with: re, content: input)
 
-  let b: State =
-    list.fold(a, State(0, True), fn(acc, match: regexp.Match) {
+  let state: State =
+    list.fold(matches, State(0, True), fn(acc, match: regexp.Match) {
       case match.content {
         "don't()" -> State(..acc, state: False)
         "do()" -> State(..acc, state: True)
@@ -59,5 +59,5 @@ pub fn day3b(path) -> Int {
       }
     })
 
-  b.number
+  state.number
 }
