@@ -6,7 +6,7 @@ import gleam/list
 
 pub fn main() {
   let path = "day1"
-  let a = aoc_gleam.to_int(aoc_gleam.read_string(path))
+  let a = aoc_gleam.to_int(aoc_gleam.read_string_rows(path))
 
 
   io.println("day 1a")
