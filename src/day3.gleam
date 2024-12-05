@@ -4,6 +4,7 @@ import gleam/io
 import gleam/list
 import gleam/option
 import gleam/regexp
+import gleam/result
 
 pub fn main() {
   let path = "day3"
@@ -45,13 +46,16 @@ pub fn day3b(path) -> Int {
         "don't()" -> State(..acc, state: False)
         "do()" -> State(..acc, state: True)
         _ -> {
-          case
-            list.filter_map(option.values(match.submatches), fn(num) {
-              int.parse(num)
-            })
-          {
-            [num1, num2, ..] if acc.state ->
-              State(number: acc.number + { num1 * num2 }, state: acc.state)
+          case match.submatches {
+            [option.Some(num1), option.Some(num2), ..] if acc.state ->
+              State(
+                number: acc.number
+                  + {
+                  result.unwrap(int.parse(num1), 0)
+                  * result.unwrap(int.parse(num2), 0)
+                },
+                state: acc.state,
+              )
             [_, _, ..] if !acc.state -> State(..acc, state: acc.state)
             _ -> acc
           }
