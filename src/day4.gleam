@@ -107,8 +107,7 @@ pub fn day4a(path) -> Int {
   list.filter(grid, fn(p) { p.1 == "X" })
   |> list.map(fn(xpoint) { traverse_all_directions(xpoint.0, grid) })
   |> list.flatten
-  |> list.filter(fn(str) { string.join(str, "") == "MAS" })
-  |> list.length
+  |> list.count(fn(str) { string.join(str, "") == "MAS" })
 }
 
 pub fn day4b(path) -> Int {
@@ -118,7 +117,7 @@ pub fn day4b(path) -> Int {
 
   list.filter(grid, fn(p) { p.1 == "A" })
   |> list.map(fn(xpoint) { traverse_diagonal(xpoint.0, grid) })
-  |> list.filter(fn(pairs) {
+  |> list.count(fn(pairs) {
     case pairs {
       [a, b] ->
         case a, b {
@@ -132,5 +131,4 @@ pub fn day4b(path) -> Int {
       _ -> False
     }
   })
-  |> list.length
 }
