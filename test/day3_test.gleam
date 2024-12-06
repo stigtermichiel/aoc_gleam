@@ -13,6 +13,6 @@ pub fn day3a_test() {
 }
 
 pub fn day3b_test() {
-  day3.day3a("day3b_test")
+  day3.day3b("day3b_test")
   |> should.equal(48)
 }

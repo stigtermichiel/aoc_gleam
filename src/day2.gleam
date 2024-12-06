@@ -25,13 +25,13 @@ fn safe(row: List(Int)) -> Bool {
 }
 
 pub fn day2a(path) -> Int {
-  let reports = aoc_gleam.to_int(aoc_gleam.read_string_rows(path))
+  let reports = aoc_gleam.to_int(aoc_gleam.read_string_rows(path, " "))
   reports
   |> list.count(safe)
 }
 
 pub fn day2b(path) -> Int {
-  aoc_gleam.to_int(aoc_gleam.read_string_rows(path))
+  aoc_gleam.to_int(aoc_gleam.read_string_rows(path, " "))
   |> list.map(fn(a) {
     let number_of_levels = list.length(a)
     list.combinations(a, number_of_levels - 1)
